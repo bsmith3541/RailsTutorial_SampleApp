@@ -39,11 +39,24 @@ class UserTest < ActiveSupport::TestCase
     end
   end
 
+  test "email validation should reject invalid emails with repeated dots" do
+    invalid_address = "user@example..com"
+    @user.email = invalid_address
+    assert_not @user.valid?
+  end
+
   test "email address should be unique" do
     duplicate_user = @user.dup
     duplicate_user.email = @user.email.upcase
     @user.save
     assert_not duplicate_user.valid?
+  end
+
+  test "email should not be case sensitive" do
+    upcase_email = "USER@EXAMPLE.COM"
+    @user.email = upcase_email
+    @user.save
+    assert_equal upcase_email.downcase, @user.reload.email
   end
 
   test "password should be a minimum length" do
