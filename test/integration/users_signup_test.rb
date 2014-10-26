@@ -15,7 +15,7 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     assert_select 'div#error_explanation li', text: "Name can't be blank"
     assert_select 'div#error_explanation li', text: "Email is invalid"
     assert_select 'div#error_explanation li', text: "Password is too short (minimum is 6 characters)"
-    
+
     assert_select 'div.field_with_errors label[for=user_name]'
     assert_select 'div.field_with_errors label[for=user_email]'
     assert_select 'div.field_with_errors label[for=user_password]'
@@ -35,5 +35,7 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
                                             password_confirmation: password }
     end
     assert_template 'users/show'
+    assert_not flash.empty?
+    assert_select 'div.alert.alert-success', text: "Welcome to the Sample App!"
   end
 end
